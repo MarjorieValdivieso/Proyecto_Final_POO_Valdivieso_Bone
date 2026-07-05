@@ -8,8 +8,8 @@ Sistema de gestión para una peluquería en Java (JavaFX) con base de datos Post
 
 ## Integrantes
 
-| Nombre completo | Rol |
-|---|---|
+| Nombre completo | 
+|---|
 | _Marjorie Valdivieso_ | 
 | _Emely Bone_ | 
 
@@ -42,12 +42,13 @@ Sistema de gestión para una peluquería en Java (JavaFX) con base de datos Post
 
 ---
 
-## 🖼️ Capturas
+## Capturas
 
-`![Login]
+`Login
+
 <img width="570" height="727" alt="Captura de pantalla 2026-07-05 160947" src="https://github.com/user-attachments/assets/3ec6d06f-93fa-445e-8322-33f5281aba00" />
 
-`![Dashboard]
+`Dashboard
 <img width="1560" height="852" alt="image" src="https://github.com/user-attachments/assets/cf3e754a-315b-4875-8cb2-e8a063a3a409" />
 
 
