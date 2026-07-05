@@ -1,4 +1,4 @@
 package model;
 
-public class Cliente {
+public class Cliente extends Persona{
 }

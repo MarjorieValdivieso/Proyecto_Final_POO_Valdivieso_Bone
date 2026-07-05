@@ -1,4 +1,4 @@
 package model;
 
-public class Cita {
+public class Cita implements Facturable{
 }
