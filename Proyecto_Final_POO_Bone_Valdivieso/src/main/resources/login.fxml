@@ -1,14 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="450.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+    <children>
 
-</AnchorPane>
+        <VBox alignment="CENTER" prefHeight="120.0" prefWidth="450.0" style="-fx-background-color: #fcf9f2; -fx-border-color: #d4af37; -fx-border-width: 0 0 3px 0;">
+            <children>
+                <Label text="✂ Belleza Elegante" textFill="#1a1a1a">
+                    <font>
+                        <Font name="Georgia Bold" size="28.0" />
+                    </font>
+                </Label>
+                <Label text="Salón de Belleza" textFill="#8c7653">
+                    <font>
+                        <Font name="Georgia Italic" size="14.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="4.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+
+        <VBox prefHeight="430.0" prefWidth="450.0" spacing="18.0" style="-fx-padding: 30 45 30 45;">
+            <children>
+                <Label alignment="CENTER" maxWidth="Infinity" text="Iniciar Sesión" textFill="#1a1a1a">
+                    <font>
+                        <Font name="System Bold" size="22.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </Label>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Usuario / Correo" textFill="#555555">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtUsuario" promptText="e.g. marianag" style="-fx-padding: 10; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-color: #ffffff;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Contraseña" textFill="#555555">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <PasswordField fx:id="txtContrasena" promptText="••••••••" style="-fx-padding: 10; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-color: #ffffff;" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Seleccionar Rol" textFill="#555555">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="cmbRol" maxWidth="Infinity" promptText="-- Seleccione su Cargo --" style="-fx-padding: 6; -fx-background-radius: 5; -fx-border-color: #d4af37; -fx-border-radius: 5; -fx-background-color: #ffffff; -fx-cursor: hand;" />
+                    </children>
+                </VBox>
+
+                <Button fx:id="btnIngresar" maxWidth="Infinity" onAction="#handleAcceder" prefHeight="45.0" style="-fx-background-color: linear-gradient(to right, #bfa36f, #d4af37); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-background-radius: 25; -fx-cursor: hand;" text="Acceder">
+                    <VBox.margin>
+                        <Insets top="15.0" />
+                    </VBox.margin>
+                </Button>
+
+            </children>
+        </VBox>
+    </children>
+</VBox>
