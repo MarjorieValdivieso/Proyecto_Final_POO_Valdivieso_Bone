@@ -58,8 +58,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
             Parent root = loader.load();
 
-            DashboardController dashboardCtrl = loader.getController();
-            dashboardCtrl.inicializarDashboard(usuarioLogueado);
+
 
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             stage.setScene(new Scene(root));

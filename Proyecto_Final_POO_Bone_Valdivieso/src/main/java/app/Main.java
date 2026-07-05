@@ -1,18 +1,29 @@
 package app;
 
+import db.Conexion;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.Connection;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        try {
 
+        // ---- Prueba de conexión a la base de datos ----
+        Connection con = Conexion.conectar();
+        if (con != null) {
+            System.out.println("Conexión exitosa a la base de datos.");
+        } else {
+            System.out.println(" No se pudo conectar");
+        }
+        // ------------------------------------------------
+
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
             Parent root = loader.load();
 
@@ -22,7 +33,7 @@ public class Main extends Application {
             stage.show();
 
         } catch (IOException e) {
-            System.err.println("Error crítico No se pudo cargar el archivo FXML. Verifica la ruta o la estructura.");
+            System.err.println("Error. No se pudo cargar el archivo FXML.");
             e.printStackTrace();
         }
     }
