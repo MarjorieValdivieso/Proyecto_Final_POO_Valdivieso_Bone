@@ -1,0 +1,126 @@
+/* Estilo base para el texto del rol activo en el Dashboard */
+.badge-rol {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 4px 10px;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+}
+
+/* Variaciones finas acordes al diseño de la peluquería */
+.rol-admin {
+    -fx-background-color: #332a15; /* Fondo oro quemado oscuro */
+    -fx-text-fill: #d4af37;        /* Texto dorado brillante */
+    -fx-border-color: #d4af37;
+}
+
+.rol-cajero {
+    -fx-background-color: #252525; /* Fondo gris ceniza */
+    -fx-text-fill: #ffffff;        /* Texto blanco puro */
+    -fx-border-color: #555555;
+}
+
+.rol-reportes {
+    -fx-background-color: #2e261d; /* Fondo bronce suave */
+    -fx-text-fill: #e5c185;        /* Texto champán claro */
+    -fx-border-color: #8c7653;
+}
+
+/* Botones del menú lateral */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER_LEFT;    /* ¡CORREGIDO AQUÍ! */
+    -fx-padding: 12px 15px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+}
+
+/* Efecto hover elegante con tonos dorados suaves */
+.menu-button:hover {
+    -fx-background-color: #2b2b2b;
+    -fx-text-fill: #d4af37;
+}
+
+/* Botón cerrar sesión rojo opaco discreto */
+.logout-button {
+    -fx-background-color: #3a1e1e;
+    -fx-text-fill: #ff8888;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #5a2828;
+    -fx-text-fill: #ffffff;
+}
+/* ==========================================================================
+   ESTILOS ADICIONALES PARA LOS BOTONES DEL FORMULARIO (PELUQUERÍA)
+   ========================================================================== */
+
+/* Guardar - Tono Oro Quemado / Dorado (Como el rol-admin) */
+.btn-guardar {
+    -fx-background-color: #332a15;
+    -fx-text-fill: #d4af37;
+    -fx-border-color: #d4af37;
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
+.btn-guardar:hover {
+    -fx-background-color: #44381c;
+    -fx-text-fill: #ffe07d;
+}
+
+/* Actualizar - Tono Bronce / Champán (Como el rol-reportes) */
+.btn-actualizar {
+    -fx-background-color: #2e261d;
+    -fx-text-fill: #e5c185;
+    -fx-border-color: #8c7653;
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
+.btn-actualizar:hover {
+    -fx-background-color: #3f3428;
+    -fx-text-fill: #ffffff;
+}
+
+/* Eliminar - Tono Rojo Opaco Discreto (Como el logout-button) */
+.btn-eliminar {
+    -fx-background-color: #3a1e1e;
+    -fx-text-fill: #ff8888;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+.btn-eliminar:hover {
+    -fx-background-color: #5a2828;
+    -fx-text-fill: #ffffff;
+}
+
+/* Limpiar - Tono Gris Ceniza Elegante (Como el rol-cajero) */
+.btn-limpiar {
+    -fx-background-color: #252525;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
+.btn-limpiar:hover {
+    -fx-background-color: #333333;
+}
