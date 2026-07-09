@@ -1,3 +1,5 @@
+package model;
+
 import model.Facturable;
 import model.Servicio;
 
@@ -13,6 +15,7 @@ public class Cita implements Facturable {
     private String estado;
 
     private Servicio servicio;
+    private String clienteNombre;
 
     public Cita() {}
 
@@ -46,6 +49,15 @@ public class Cita implements Facturable {
 
     public Servicio getServicio() { return servicio; }
     public void setServicio(Servicio servicio) { this.servicio = servicio; }
+
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
+    }
 
     @Override
     public double calcularCosto() {

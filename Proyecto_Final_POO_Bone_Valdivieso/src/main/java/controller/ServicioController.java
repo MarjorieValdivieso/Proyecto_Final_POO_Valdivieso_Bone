@@ -4,9 +4,16 @@ import dao.ServicioDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Servicio;
+import model.Usuario;
+
+import java.io.IOException;
 
 public class ServicioController {
 
@@ -19,8 +26,14 @@ public class ServicioController {
     @FXML private TableColumn<Servicio, Double> colPrecio;
     @FXML private TableColumn<Servicio, String> colDuracion;
 
+    private Usuario usuarioActual;
+
     private final ServicioDao servicioDao = new ServicioDao();
     private final ObservableList<Servicio> listaServicios = FXCollections.observableArrayList();
+
+    public void setUsuario(Usuario usuario) {
+        this.usuarioActual = usuario;
+    }
 
     @FXML
     public void initialize() {
@@ -106,5 +119,44 @@ public class ServicioController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    @FXML
+    public void irADashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            Parent root = loader.load();
+
+            DashboardController controller = loader.getController();
+            controller.setUsuario(usuarioActual);
+
+            Stage stage = (Stage) txtNombre.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Belleza Elegante - Panel de Control");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error del Sistema", "No se pudo volver al Dashboard.", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleCerrarSesion() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) txtNombre.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Belleza Elegante - Iniciar Sesión");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error del Sistema", "No se pudo cerrar sesión.", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
     }
 }

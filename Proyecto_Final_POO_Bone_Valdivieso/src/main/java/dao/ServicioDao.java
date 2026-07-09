@@ -64,6 +64,7 @@ public class ServicioDao {
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
+
             ps.setInt(1, id);
 
             return ps.executeUpdate() > 0;
