@@ -64,4 +64,53 @@ public class ClienteDao {
         }
         return lista;
     }
+
+    public Cliente buscarPorTelefono(String telefono) {
+        String sql = "SELECT * FROM clientes WHERE telefono = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, telefono);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cliente cliente = new Cliente();
+                    cliente.setId(rs.getInt("id"));
+                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setTelefono(rs.getString("telefono"));
+                    cliente.setCorreo(rs.getString("correo"));
+                    return cliente;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar cliente por teléfono: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public int guardarYObtenerId(Cliente cliente) {
+        String sql = "INSERT INTO clientes (nombre, telefono, correo) VALUES (?, ?, ?)";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, cliente.getNombre());
+            ps.setString(2, cliente.getTelefono());
+            ps.setString(3, cliente.getCorreo());
+
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al guardar cliente y obtener ID: " + e.getMessage());
+        }
+        return -1;
+    }
+
 }
