@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -18,6 +19,12 @@ public class DashboardController {
     @FXML private Label lblRol;
     @FXML private AnchorPane contentArea;
 
+
+    @FXML private Button btnIrClientes;
+    @FXML private Button btnIrServicios;
+    @FXML private Button btnCitas;
+    @FXML private Button btnReportes;
+
     private Usuario usuarioActual;
 
     public void setUsuario(Usuario usuario) {
@@ -26,17 +33,24 @@ public class DashboardController {
         lblUsuario.setText("Usuario: " + usuario.getUsuario());
         lblRol.setText(usuario.getRol().toUpperCase());
 
-        lblRol.getStyleClass().removeAll("rol-admin", "rol-cajero", "rol-reportes");
         String rol = usuario.getRol();
-        if ("Administrador".equalsIgnoreCase(rol)) {
-            lblRol.getStyleClass().add("rol-admin");
-        } else if ("Cajero".equalsIgnoreCase(rol)) {
-            lblRol.getStyleClass().add("rol-cajero");
+
+        if ("Cajero".equalsIgnoreCase(rol)) {
+            btnReportes.setVisible(false);
+            btnReportes.setManaged(false);
+
         } else if ("Reportes".equalsIgnoreCase(rol)) {
-            lblRol.getStyleClass().add("rol-reportes");
+            btnIrClientes.setVisible(false);
+            btnIrClientes.setManaged(false);
+            btnIrServicios.setVisible(false);
+            btnIrServicios.setManaged(false);
+            btnCitas.setVisible(false);
+            btnCitas.setManaged(false);
+
+        } else {
+
         }
 
-        // Seccion por defecto al entrar al dashboard
         mostrarClientes();
     }
 
@@ -66,18 +80,10 @@ public class DashboardController {
             Parent nuevoContenido = loader.load();
 
             Object controller = loader.getController();
-            if (controller instanceof ClienteController c) {
-                c.setUsuario(usuarioActual);
-            }
-            if (controller instanceof ServicioController s) {
-                s.setUsuario(usuarioActual);
-            }
-            if (controller instanceof CitaController ci) {
-                ci.setUsuario(usuarioActual);
-            }
-            if (controller instanceof ReportesController r) {
-                r.setUsuario(usuarioActual);
-            }
+            if (controller instanceof ClienteController c) c.setUsuario(usuarioActual);
+            if (controller instanceof ServicioController s) s.setUsuario(usuarioActual);
+            if (controller instanceof CitaController ci) ci.setUsuario(usuarioActual);
+            if (controller instanceof ReportesController r) r.setUsuario(usuarioActual);
 
             AnchorPane.setTopAnchor(nuevoContenido, 0.0);
             AnchorPane.setBottomAnchor(nuevoContenido, 0.0);

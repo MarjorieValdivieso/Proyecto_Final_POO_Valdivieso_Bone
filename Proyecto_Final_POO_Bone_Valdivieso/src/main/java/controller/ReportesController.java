@@ -1,62 +1,71 @@
 package controller;
 
-import dao.CitaDao;
-import dao.ClienteDao;
-import dao.ServicioDao;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+
+import dao.CitaDao;
+import dao.ClienteDao;
 import model.Cita;
-import model.Cliente;
-import model.Servicio;
 import model.Usuario;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ReportesController {
 
-    @FXML private TableView<Cita> tablaCitas;
-    @FXML private TableColumn<Cita, String> colClienteCita;
-    @FXML private TableColumn<Cita, String> colEstado;
-
-    @FXML private TableView<Servicio> tablaServicios;
-    @FXML private TableColumn<Servicio, String> colNombreServicio;
-    @FXML private TableColumn<Servicio, Double> colPrecio;
-
-    @FXML private TableView<Cliente> tablaClientes;
-    @FXML private TableColumn<Cliente, String> colNombreCliente;
-    @FXML private TableColumn<Cliente, String> colTelefono;
-
-    private final CitaDao citaDao = new CitaDao();
-    private final ServicioDao servicioDao = new ServicioDao();
-    private final ClienteDao clienteDao = new ClienteDao();
+    @FXML private Label lblTotalClientes;
+    @FXML private Label lblTotalCitas;
+    @FXML private Label lblPendientes;
+    @FXML private Label lblConfirmadas;
+    @FXML private Label lblCanceladas;
+    @FXML private BarChart<String, Number> chartServicios;
 
     private Usuario usuarioActual;
 
     public void setUsuario(Usuario usuario) {
         this.usuarioActual = usuario;
+        cargarDatos();
     }
 
     @FXML
     public void initialize() {
-        configurarColumnas();
-        cargarReportes();
+        cargarDatos();
     }
 
-    private void configurarColumnas() {
-        colClienteCita.setCellValueFactory(new PropertyValueFactory<>("clienteNombre"));
-        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+    private void cargarDatos() {
+        List<Cita> citas = new CitaDao().listarTodos();
+        int totalClientes = new ClienteDao().listarTodos().size();
 
-        colNombreServicio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        int pendientes = 0, confirmadas = 0, canceladas = 0;
+        Map<String, Integer> citasPorServicio = new HashMap<>();
 
-        colNombreCliente.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
-    }
+        for (Cita c : citas) {
+            String estado = c.getEstado();
+            if ("Pendiente".equalsIgnoreCase(estado)) pendientes++;
+            else if ("Confirmada".equalsIgnoreCase(estado)) confirmadas++;
+            else if ("Cancelada".equalsIgnoreCase(estado)) canceladas++;
 
-    private void cargarReportes() {
-        tablaCitas.setItems(FXCollections.observableArrayList(citaDao.listarTodos()));
-        tablaServicios.setItems(FXCollections.observableArrayList(servicioDao.listarTodos()));
-        tablaClientes.setItems(FXCollections.observableArrayList(clienteDao.listarTodos()));
+            String nombreServicio = c.getServicio() != null ? c.getServicio().getNombre() : "Sin servicio";
+            citasPorServicio.merge(nombreServicio, 1, Integer::sum);
+        }
+
+        lblTotalClientes.setText(String.valueOf(totalClientes));
+        lblTotalCitas.setText(String.valueOf(citas.size()));
+        lblPendientes.setText(String.valueOf(pendientes));
+        lblConfirmadas.setText(String.valueOf(confirmadas));
+        lblCanceladas.setText(String.valueOf(canceladas));
+
+        XYChart.Series<String, Number> serie = new XYChart.Series<>();
+        serie.setName("Citas por servicio");
+        for (Map.Entry<String, Integer> entry : citasPorServicio.entrySet()) {
+            serie.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
+        chartServicios.getData().clear();
+        chartServicios.getData().add(serie);
     }
 }
