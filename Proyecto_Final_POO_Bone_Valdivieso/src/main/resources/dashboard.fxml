@@ -39,10 +39,10 @@
                             </VBox.margin>
                         </VBox>
 
-                        <Button fx:id="btnCitas" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text="📅 Citas" />
+                        <Button fx:id="btnCitas" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text=" Citas" />
                         <Button fx:id="btnIrClientes" onAction="#irAClientes" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text="👥 Clientes" />
                         <Button fx:id="btnIrServicios" onAction="#irAServicios" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text="✂ Servicios" />
-                        <Button fx:id="btnReportes" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text="📊 Reportes" />
+                        <Button fx:id="btnReportes" onAction="#irAReportes" mnemonicParsing="false" prefWidth="200.0" styleClass="menu-button" text="📊 Reportes" />
 
                         <VBox VBox.vgrow="ALWAYS" />
 

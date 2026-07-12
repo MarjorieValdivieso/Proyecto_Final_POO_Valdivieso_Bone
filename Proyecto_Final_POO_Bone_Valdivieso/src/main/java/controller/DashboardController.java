@@ -396,4 +396,20 @@ public class DashboardController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+
+    @FXML
+    public void irAReportes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/reportes.fxml"));
+            Parent root = loader.load();
+
+            ReportesController controller = loader.getController();
+            controller.setUsuario(usuarioActual);
+
+            cambiarEscena(root, "Belleza Elegante - Reportes");
+        } catch (IOException e) {
+            mostrarAlerta("Error del Sistema", "No se pudo cargar la pantalla de Reportes.", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
 }
