@@ -2,7 +2,6 @@
 
 Sistema de gestión para una peluquería en Java (JavaFX) con base de datos PostgreSQL, aplicando POO (herencia, clases abstractas, interfaces y patrón DAO).
 
-**Avance actual: ~25%.** Implementado: Login y Dashboard. Pendiente: Clientes, Servicios y Citas.
 
 ---
 
@@ -56,8 +55,4 @@ Sistema de gestión para una peluquería en Java (JavaFX) con base de datos Post
 ---
 
 ##  Pendiente
-
-- [ ] Módulo Clientes
-- [ ] Módulo Servicios
-- [ ] Módulo Citas
 - [ ] Ejecutable `.exe`
