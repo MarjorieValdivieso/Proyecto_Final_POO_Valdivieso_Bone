@@ -1,6 +1,7 @@
 package controller;
 
 import dao.UsuarioDao;
+import controller.DashboardController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,7 +59,8 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
             Parent root = loader.load();
 
-
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setUsuario(usuarioLogueado);
 
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -70,6 +72,8 @@ public class LoginController {
             mostrarAlerta("Error del Sistema", "No se pudo cargar la pantalla principal del Dashboard.", Alert.AlertType.ERROR);
             e.printStackTrace();
         }
+
+
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {

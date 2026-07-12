@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class ServicioController {
 
+    @FXML private Button btnGuardar;
+    @FXML private Button btnEliminar;
     @FXML private TextField txtNombre;
     @FXML private TextField txtPrecio;
     @FXML private TextField txtDuracion;
@@ -33,6 +35,21 @@ public class ServicioController {
 
     public void setUsuario(Usuario usuario) {
         this.usuarioActual = usuario;
+        aplicarPermisosPorRol();
+    }
+
+    private void aplicarPermisosPorRol() {
+        if (usuarioActual == null) return;
+        boolean esReportes = "Reportes".equalsIgnoreCase(usuarioActual.getRol());
+
+        txtNombre.setDisable(esReportes);
+        txtPrecio.setDisable(esReportes);
+        txtDuracion.setDisable(esReportes);
+
+        btnGuardar.setVisible(!esReportes);
+        btnGuardar.setManaged(!esReportes);
+        btnEliminar.setVisible(!esReportes);
+        btnEliminar.setManaged(!esReportes);
     }
 
     @FXML
