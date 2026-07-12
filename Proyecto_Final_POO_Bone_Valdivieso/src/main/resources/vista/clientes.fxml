@@ -21,23 +21,6 @@
                         <Font name="Georgia Bold" size="24.0" />
                     </font>
                 </Label>
-                <Label text="Registra y administra tus clientes" textFill="#8c7653">
-                    <font>
-                        <Font name="Georgia Italic" size="13.0" />
-                    </font>
-                </Label>
-                <Button fx:id="btnVolver" onAction="#irADashboard" text="&#8592; Volver al Dashboard"
-                        style="-fx-background-color: transparent; -fx-text-fill: #8c7653; -fx-cursor: hand; -fx-padding: 0;">
-                    <VBox.margin>
-                        <Insets top="8.0" />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnCerrarSesion" onAction="#handleCerrarSesion" text="Cerrar Sesión"
-                        style="-fx-background-color: #3a1e1e; -fx-text-fill: #ff8888; -fx-cursor: hand; -fx-background-radius: 5;">
-                    <VBox.margin>
-                        <Insets top="4.0" />
-                    </VBox.margin>
-                </Button>
             </children>
         </VBox>
 

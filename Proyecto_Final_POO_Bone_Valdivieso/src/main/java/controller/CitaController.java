@@ -1,24 +1,29 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
+
+import dao.CitaDao;
+import dao.ClienteDao;
+import dao.ServicioDao;
 import model.Cita;
+import model.Cliente;
+import model.Servicio;
 import model.Usuario;
 
-import java.io.IOException;
+import java.time.LocalTime;
 
 public class CitaController {
 
-    // 1. Elementos visuales vinculados al FXML
-    @FXML private ComboBox<?> cbCliente;
-    @FXML private ComboBox<?> cbServicio;
+    @FXML private ComboBox<Cliente> cbCliente;
+    @FXML private ComboBox<Servicio> cbServicio;
     @FXML private DatePicker dpFecha;
     @FXML private TextField txtHora;
     @FXML private ComboBox<String> cbEstado;
+
     @FXML private TableView<Cita> tablaCitas;
     @FXML private TableColumn<Cita, String> colCliente;
     @FXML private TableColumn<Cita, String> colServicio;
@@ -26,11 +31,8 @@ public class CitaController {
     @FXML private TableColumn<Cita, String> colHora;
     @FXML private TableColumn<Cita, String> colEstado;
 
-    // Botones clave para resolver los errores de vinculación
     @FXML private Button btnGuardar;
-    @FXML private Button btnVolver;
 
-    // 2. Control de sesión del usuario actual
     private Usuario usuarioActual;
 
     public void setUsuario(Usuario usuario) {
@@ -39,39 +41,59 @@ public class CitaController {
 
     @FXML
     public void initialize() {
-        // Tu lógica para poblar tablas y ComboBoxes al cargar la pantalla
+
+        cbCliente.setConverter(new StringConverter<Cliente>() {
+            @Override
+            public String toString(Cliente c) { return c != null ? c.getNombre() : ""; }
+            @Override
+            public Cliente fromString(String s) { return null; }
+        });
+
+        cbServicio.setConverter(new StringConverter<Servicio>() {
+            @Override
+            public String toString(Servicio s) { return s != null ? s.getNombre() : ""; }
+            @Override
+            public Servicio fromString(String s) { return null; }
+        });
+
+        // Columnas de la tabla
+        colCliente.setCellValueFactory(new PropertyValueFactory<>("clienteNombre"));
+        colServicio.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(
+                        data.getValue().getServicio() != null
+                                ? data.getValue().getServicio().getNombre() : ""));
+        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+
+        // Cargar datos
+        cbCliente.setItems(FXCollections.observableArrayList(new ClienteDao().listarTodos()));
+        cbServicio.setItems(FXCollections.observableArrayList(new ServicioDao().listarTodos()));
+        cbEstado.setItems(FXCollections.observableArrayList("Pendiente", "Confirmada", "Cancelada"));
+
+        tablaCitas.setItems(FXCollections.observableArrayList(new CitaDao().listarTodos()));
     }
 
-    // 3. Método requerido por la línea 89 del FXML para registrar las citas
     @FXML
     public void handleGuardarCita() {
-        // Tu lógica para recopilar la información y llamar a CitaDao
-        System.out.println("Procesando el guardado de la cita...");
-    }
+        Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
+        Servicio servicioSeleccionado = cbServicio.getSelectionModel().getSelectedItem();
 
-    // 4. Acción asignada al botón de regreso en la barra superior
-    @FXML
-    public void irADashboard() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
-            Parent root = loader.load();
+        Cita cita = new Cita();
+        cita.setClienteId(clienteSeleccionado.getId());
+        cita.setClienteNombre(clienteSeleccionado.getNombre());
+        cita.setServicioId(servicioSeleccionado.getId());
+        cita.setServicio(servicioSeleccionado);
+        cita.setFecha(dpFecha.getValue());
+        cita.setHora(LocalTime.parse(txtHora.getText().trim()));
+        cita.setEstado(cbEstado.getSelectionModel().getSelectedItem());
 
-            DashboardController controller = loader.getController();
-            controller.setUsuario(usuarioActual);
+        boolean guardado = new CitaDao().guardar(cita);
 
-            Stage stage = (Stage) btnVolver.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Belleza Elegante - Panel de Control");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            Alert alerta = new Alert(Alert.AlertType.ERROR);
-            alerta.setTitle("Error del Sistema");
-            alerta.setHeaderText(null);
-            alerta.setContentText("No se pudo regresar al panel de control.");
-            alerta.showAndWait();
-            e.printStackTrace();
+        if (guardado) {
+            tablaCitas.getItems().add(cita);
+        } else {
+            System.out.println("No se pudo guardar la cita.");
         }
     }
 }

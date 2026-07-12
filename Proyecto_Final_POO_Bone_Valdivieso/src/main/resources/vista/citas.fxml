@@ -20,9 +20,6 @@
                 <Label text="Agenda de Citas" textFill="#1a1a1a">
                     <font><Font name="Georgia Bold" size="24.0" /></font>
                 </Label>
-                <Label text="Agenda y da seguimiento a tus citas" textFill="#8c7653">
-                    <font><Font name="Georgia Italic" size="13.0" /></font>
-                </Label>
             </children>
         </VBox>
 

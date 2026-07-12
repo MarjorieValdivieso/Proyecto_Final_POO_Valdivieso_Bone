@@ -1,7 +1,6 @@
 package controller;
 
 import dao.UsuarioDao;
-import controller.DashboardController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,7 +55,7 @@ public class LoginController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/dashboard.fxml"));
             Parent root = loader.load();
 
             DashboardController dashboardController = loader.getController();

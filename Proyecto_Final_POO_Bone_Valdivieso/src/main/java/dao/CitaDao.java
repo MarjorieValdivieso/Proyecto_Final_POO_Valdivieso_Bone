@@ -77,7 +77,7 @@ public class CitaDao {
                 "s.nombre AS servicio_nombre, s.precio AS servicio_precio, s.duracion AS servicio_duracion " +
                 "FROM citas c " +
                 "JOIN clientes cl ON cl.id = c.cliente_id " +
-                "JOIN servicio s ON s.id = c.servicio_id " +
+                "JOIN servicios s ON s.id = c.servicio_id " +
                 "ORDER BY c.fecha, c.hora";
 
         try (Connection con = Conexion.conectar();

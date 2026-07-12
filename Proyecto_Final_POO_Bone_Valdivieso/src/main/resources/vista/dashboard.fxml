@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/estilo.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
+
+    <children>
+
+        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <children>
+
+                <VBox prefWidth="220.0" spacing="10.0" style="-fx-background-color:#1a1a1a;">
+
+                    <padding>
+                        <Insets bottom="15" left="10" right="10" top="15" />
+                    </padding>
+
+                    <children>
+
+                        <VBox alignment="CENTER" spacing="8">
+
+                            <VBox.margin>
+                                <Insets bottom="20" top="10" />
+                            </VBox.margin>
+
+                            <children>
+
+                                <Label fx:id="lblUsuario" style="-fx-font-weight:bold;" text="Usuario: -" textFill="WHITE" />
+
+                                <Label fx:id="lblRol" style="-fx-background-color:transparent;                                               -fx-border-color:#d4af37;                                               -fx-border-width:1.5;                                               -fx-border-radius:20;                                               -fx-background-radius:20;                                               -fx-padding:6 16 6 16;" text="ROL" textFill="#d4af37" />
+
+                            </children>
+
+                        </VBox>
+
+                        <Button fx:id="btnIrClientes" onAction="#mostrarClientes" prefWidth="200" styleClass="menu-button" text="Clientes" />
+
+                        <Button fx:id="btnIrServicios" onAction="#mostrarServicios" prefWidth="200" styleClass="menu-button" text="Servicios" />
+
+                        <Button fx:id="btnCitas" onAction="#mostrarCitas" prefWidth="200" styleClass="menu-button" text="Citas" />
+
+                        <Button fx:id="btnReportes" onAction="#mostrarReportes" prefWidth="200" styleClass="menu-button" text="Reportes" />
+
+                        <VBox VBox.vgrow="ALWAYS" />
+
+                        <Button fx:id="btnCerrarSesion" onAction="#handleCerrarSesion" prefWidth="200" styleClass="logout-button" text="Cerrar Sesión" />
+
+                    </children>
+
+                </VBox>
+
+                <AnchorPane fx:id="contentArea" style="-fx-background-color:white;" HBox.hgrow="ALWAYS" />
+
+            </children>
+
+        </HBox>
+
+    </children>
+
+</AnchorPane>

@@ -141,7 +141,7 @@ public class ServicioController {
     @FXML
     public void irADashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/dashboard.fxml"));
             Parent root = loader.load();
 
             DashboardController controller = loader.getController();
@@ -162,7 +162,7 @@ public class ServicioController {
     @FXML
     public void handleCerrarSesion() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) txtNombre.getScene().getWindow();

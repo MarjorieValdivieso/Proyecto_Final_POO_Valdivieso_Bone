@@ -13,7 +13,7 @@ public class ServicioDao {
 
         List<Servicio> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM servicio ORDER BY id";
+        String sql = "SELECT * FROM servicios ORDER BY id";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -40,7 +40,7 @@ public class ServicioDao {
 
     public boolean guardar(Servicio servicio) {
 
-        String sql = "INSERT INTO servicio(nombre, precio, duracion) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO servicios(nombre, precio, duracion) VALUES (?, ?, ?)";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -59,7 +59,7 @@ public class ServicioDao {
 
     public boolean eliminar(int id) {
 
-        String sql = "DELETE FROM servicio WHERE id = ?";
+        String sql = "DELETE FROM servicios WHERE id = ?";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
