@@ -84,7 +84,31 @@ public class ClienteDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar cliente por teléfono: " + e.getMessage());
+            System.out.println("Error al buscar cliente por telefono: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Cliente buscarPorId(int id) {
+        String sql = "SELECT * FROM clientes WHERE id = ?";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cliente cliente = new Cliente();
+                    cliente.setId(rs.getInt("id"));
+                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setTelefono(rs.getString("telefono"));
+                    cliente.setCorreo(rs.getString("correo"));
+                    return cliente;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar cliente por id: " + e.getMessage());
         }
         return null;
     }
@@ -112,5 +136,4 @@ public class ClienteDao {
         }
         return -1;
     }
-
 }

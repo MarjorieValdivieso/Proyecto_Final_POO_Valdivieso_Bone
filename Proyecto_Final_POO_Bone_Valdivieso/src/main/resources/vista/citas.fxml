@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefWidth="900.0"
+      style="-fx-background-color:#ffffff;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.CitaController">
+
+    <children>
+
+        <!-- ENCABEZADO -->
+
+        <VBox alignment="CENTER_LEFT"
+              prefHeight="90"
+              style="-fx-background-color:#fcf9f2;
+                     -fx-border-color:#d4af37;
+                     -fx-border-width:0 0 3 0;
+                     -fx-padding:20 30 20 30;">
+
+            <children>
+
+                <Label text="Gestión de Citas"
+                       textFill="#1a1a1a">
+                    <font>
+                        <Font name="Georgia Bold" size="24"/>
+                    </font>
+                </Label>
+
+            </children>
+
+        </VBox>
+
+        <!-- FORMULARIO -->
+
+        <VBox spacing="15"
+              style="-fx-padding:25 30 15 30;">
+
+            <children>
+
+                <HBox spacing="15"
+                      alignment="CENTER_LEFT">
+
+                    <children>
+
+                        <ComboBox fx:id="cmbCliente"
+                                  promptText="Cliente"
+                                  prefWidth="180"/>
+
+                        <DatePicker fx:id="dpFecha"
+                                    prefWidth="150"/>
+
+                        <TextField fx:id="txtHoraCita"
+                                   promptText="Hora (14:30)"
+                                   prefWidth="120"/>
+
+                        <ComboBox fx:id="cmbServicios"
+                                  promptText="Servicio"
+                                  prefWidth="180"/>
+
+                        <ComboBox fx:id="cmbEstado"
+                                  promptText="Estado"
+                                  prefWidth="140"/>
+
+                    </children>
+
+                </HBox>
+
+            </children>
+
+        </VBox>
+
+        <!-- BOTONES -->
+
+        <HBox alignment="CENTER"
+              spacing="15"
+              style="-fx-padding:5 30 20 30;">
+
+            <children>
+
+                <Button fx:id="btnGuardar"
+                        text="Guardar"
+                        onAction="#handleGuardarCita"
+                        style="-fx-background-color: linear-gradient(to right,#bfa36f,#d4af37);
+                               -fx-text-fill:white;
+                               -fx-font-weight:bold;
+                               -fx-background-radius:20;" />
+
+                <Button fx:id="btnActualizar"
+                        text="Actualizar"
+                        onAction="#handleActualizarCita"
+                        style="-fx-background-color:#3b82f6;
+                               -fx-text-fill:white;
+                               -fx-font-weight:bold;
+                               -fx-background-radius:20;" />
+
+                <Button fx:id="btnEliminar"
+                        text="Eliminar"
+                        onAction="#handleEliminarCita"
+                        style="-fx-background-color:#b8503f;
+                               -fx-text-fill:white;
+                               -fx-font-weight:bold;
+                               -fx-background-radius:20;" />
+
+                <Button fx:id="btnLimpiar"
+                        text="Limpiar"
+                        onAction="#handleLimpiarCita"
+                        style="-fx-background-color:#6c757d;
+                               -fx-text-fill:white;
+                               -fx-font-weight:bold;
+                               -fx-background-radius:20;" />
+
+            </children>
+
+        </HBox>
+
+        <!-- TABLA -->
+
+        <VBox style="-fx-padding:0 30 25 30;"
+              VBox.vgrow="ALWAYS">
+
+            <children>
+
+                <TableView fx:id="tvCitas"
+                           VBox.vgrow="ALWAYS">
+
+                    <columns>
+
+                        <TableColumn fx:id="colFecha"
+                                     text="Fecha"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="colHora"
+                                     text="Hora"
+                                     prefWidth="100"/>
+
+                        <TableColumn fx:id="colCliente"
+                                     text="Cliente"
+                                     prefWidth="200"/>
+
+                        <TableColumn fx:id="colServicio"
+                                     text="Servicio"
+                                     prefWidth="180"/>
+
+                        <TableColumn fx:id="colEstado"
+                                     text="Estado"
+                                     prefWidth="130"/>
+
+                    </columns>
+
+                </TableView>
+
+            </children>
+
+        </VBox>
+
+    </children>
+
+</VBox>

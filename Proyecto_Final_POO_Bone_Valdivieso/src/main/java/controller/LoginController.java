@@ -55,10 +55,14 @@ public class LoginController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/dashboard.fxml"));
             Parent root = loader.load();
 
+// Obtiene el controlador del Dashboard
+            DashboardController dashboardController = loader.getController();
 
+// Envia el usuario que inicio sesión
+            dashboardController.setUsuario(usuarioLogueado);
 
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             stage.setScene(new Scene(root));
