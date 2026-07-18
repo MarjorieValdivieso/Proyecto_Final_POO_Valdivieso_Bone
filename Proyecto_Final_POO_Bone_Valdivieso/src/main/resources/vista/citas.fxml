@@ -80,6 +80,10 @@
                                 style="-fx-background-color: #b8503f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
                             <VBox.margin><Insets top="17.0" /></VBox.margin>
                         </Button>
+                        <Button fx:id="btnImprimir" onAction="#handleImprimirComprobante" text="Imprimir Comprobante" prefHeight="38.0"
+                                style="-fx-background-color: #2f6f4e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
+                            <VBox.margin><Insets top="17.0" /></VBox.margin>
+                        </Button>
                     </children>
                 </HBox>
             </children>

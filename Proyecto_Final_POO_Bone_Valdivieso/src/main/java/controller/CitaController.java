@@ -2,8 +2,12 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import dao.CitaDao;
@@ -14,6 +18,7 @@ import model.Cliente;
 import model.Servicio;
 import model.Usuario;
 
+import java.io.IOException;
 import java.time.LocalTime;
 
 public class CitaController {
@@ -33,6 +38,7 @@ public class CitaController {
 
     @FXML private Button btnGuardar;
     @FXML private Button btnEliminar;
+    @FXML private Button btnImprimir;
 
     private Usuario usuarioActual;
 
@@ -55,6 +61,8 @@ public class CitaController {
         btnGuardar.setManaged(!esReportes);
         btnEliminar.setVisible(!esReportes);
         btnEliminar.setManaged(!esReportes);
+        btnImprimir.setVisible(!esReportes);
+        btnImprimir.setManaged(!esReportes);
     }
     @FXML
     public void initialize() {
@@ -137,6 +145,42 @@ public class CitaController {
             alerta.setHeaderText(null);
             alerta.setContentText("No se pudo eliminar la cita.");
             alerta.showAndWait();
+        }
+    }
+
+    @FXML
+    public void handleImprimirComprobante() {
+        Cita seleccionada = tablaCitas.getSelectionModel().getSelectedItem();
+
+        if (seleccionada == null) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Selecciona una cita");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Debes elegir una fila de la tabla para generar el comprobante.");
+            alerta.showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/factura.fxml"));
+            Parent root = loader.load();
+
+            FacturaController facturaController = loader.getController();
+            facturaController.setCita(seleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Comprobante de Pago");
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("Error");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No se pudo generar el comprobante.");
+            alerta.showAndWait();
+            e.printStackTrace();
         }
     }
 }

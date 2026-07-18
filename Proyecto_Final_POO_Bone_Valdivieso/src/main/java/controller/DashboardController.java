@@ -38,6 +38,8 @@ public class DashboardController {
         if ("Cajero".equalsIgnoreCase(rol)) {
             btnReportes.setVisible(false);
             btnReportes.setManaged(false);
+            btnIrServicios.setVisible(false);
+            btnIrServicios.setManaged(false);
 
         } else if ("Reportes".equalsIgnoreCase(rol)) {
             btnIrClientes.setVisible(false);
