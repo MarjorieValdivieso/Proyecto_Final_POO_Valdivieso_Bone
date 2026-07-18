@@ -76,6 +76,10 @@
                                 style="-fx-background-color: linear-gradient(to right, #bfa36f, #d4af37); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
                             <VBox.margin><Insets top="17.0" /></VBox.margin>
                         </Button>
+                        <Button fx:id="btnEliminar" onAction="#handleEliminarCita" text="Eliminar" prefHeight="38.0"
+                                style="-fx-background-color: #b8503f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
+                            <VBox.margin><Insets top="17.0" /></VBox.margin>
+                        </Button>
                     </children>
                 </HBox>
             </children>

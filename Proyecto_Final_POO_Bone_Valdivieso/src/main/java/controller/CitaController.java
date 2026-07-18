@@ -32,13 +32,30 @@ public class CitaController {
     @FXML private TableColumn<Cita, String> colEstado;
 
     @FXML private Button btnGuardar;
+    @FXML private Button btnEliminar;
 
     private Usuario usuarioActual;
 
     public void setUsuario(Usuario usuario) {
         this.usuarioActual = usuario;
+        aplicarPermisosPorRol();
     }
 
+    private void aplicarPermisosPorRol() {
+        if (usuarioActual == null) return;
+        boolean esReportes = "Reportes".equalsIgnoreCase(usuarioActual.getRol());
+
+        cbCliente.setDisable(esReportes);
+        cbServicio.setDisable(esReportes);
+        dpFecha.setDisable(esReportes);
+        txtHora.setDisable(esReportes);
+        cbEstado.setDisable(esReportes);
+
+        btnGuardar.setVisible(!esReportes);
+        btnGuardar.setManaged(!esReportes);
+        btnEliminar.setVisible(!esReportes);
+        btnEliminar.setManaged(!esReportes);
+    }
     @FXML
     public void initialize() {
 
@@ -94,6 +111,32 @@ public class CitaController {
             tablaCitas.getItems().add(cita);
         } else {
             System.out.println("No se pudo guardar la cita.");
+        }
+    }
+
+    @FXML
+    public void handleEliminarCita() {
+        Cita seleccionada = tablaCitas.getSelectionModel().getSelectedItem();
+
+        if (seleccionada == null) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Selecciona una cita");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Debes elegir una fila de la tabla para eliminar.");
+            alerta.showAndWait();
+            return;
+        }
+
+        boolean exito = new CitaDao().eliminar(seleccionada.getId());
+
+        if (exito) {
+            tablaCitas.getItems().remove(seleccionada);
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("Error");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No se pudo eliminar la cita.");
+            alerta.showAndWait();
         }
     }
 }
