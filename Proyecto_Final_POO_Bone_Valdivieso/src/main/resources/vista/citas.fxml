@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CitaController">
+<VBox prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CitaController">
     <children>
 
         <VBox alignment="CENTER_LEFT" prefHeight="90.0" style="-fx-background-color: #fcf9f2; -fx-border-color: #d4af37; -fx-border-width: 0 0 3px 0; -fx-padding: 20 30 20 30;">
@@ -25,15 +18,14 @@
 
         <VBox spacing="10.0" style="-fx-padding: 25 30 15 30;">
             <children>
-                <HBox spacing="12.0" alignment="CENTER_LEFT">
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
                     <children>
                         <VBox spacing="4.0">
                             <children>
                                 <Label text="Cliente" textFill="#555555">
                                     <font><Font name="System Bold" size="12.0" /></font>
                                 </Label>
-                                <ComboBox fx:id="cbCliente" promptText="Seleccione cliente" prefWidth="170.0"
-                                          style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #d4af37; -fx-border-radius: 5;" />
+                                <ComboBox fx:id="cbCliente" prefWidth="170.0" promptText="Seleccione cliente" style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #d4af37; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
                         <VBox spacing="4.0">
@@ -41,8 +33,7 @@
                                 <Label text="Servicio" textFill="#555555">
                                     <font><Font name="System Bold" size="12.0" /></font>
                                 </Label>
-                                <ComboBox fx:id="cbServicio" promptText="Seleccione servicio" prefWidth="170.0"
-                                          style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #d4af37; -fx-border-radius: 5;" />
+                                <ComboBox fx:id="cbServicio" prefWidth="170.0" promptText="Seleccione servicio" style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #d4af37; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
                         <VBox spacing="4.0">
@@ -50,8 +41,7 @@
                                 <Label text="Fecha" textFill="#555555">
                                     <font><Font name="System Bold" size="12.0" /></font>
                                 </Label>
-                                <DatePicker fx:id="dpFecha" prefWidth="140.0"
-                                            style="-fx-padding: 2; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
+                                <DatePicker fx:id="dpFecha" prefWidth="140.0" style="-fx-padding: 2; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
                         <VBox spacing="4.0">
@@ -59,8 +49,7 @@
                                 <Label text="Hora" textFill="#555555">
                                     <font><Font name="System Bold" size="12.0" /></font>
                                 </Label>
-                                <TextField fx:id="txtHora" promptText="HH:MM" prefWidth="80.0"
-                                           style="-fx-padding: 9; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
+                                <TextField fx:id="txtHora" prefWidth="80.0" promptText="HH:MM" style="-fx-padding: 9; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
                         <VBox spacing="4.0">
@@ -68,37 +57,46 @@
                                 <Label text="Estado" textFill="#555555">
                                     <font><Font name="System Bold" size="12.0" /></font>
                                 </Label>
-                                <ComboBox fx:id="cbEstado" promptText="Estado" prefWidth="130.0"
-                                          style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
+                                <ComboBox fx:id="cbEstado" prefWidth="130.0" promptText="Estado" style="-fx-padding: 5; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
-                        <Button fx:id="btnGuardar" onAction="#handleGuardarCita" text="Agendar" prefHeight="38.0"
-                                style="-fx-background-color: linear-gradient(to right, #bfa36f, #d4af37); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
-                            <VBox.margin><Insets top="17.0" /></VBox.margin>
-                        </Button>
-                        <Button fx:id="btnEliminar" onAction="#handleEliminarCita" text="Eliminar" prefHeight="38.0"
-                                style="-fx-background-color: #b8503f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
-                            <VBox.margin><Insets top="17.0" /></VBox.margin>
-                        </Button>
-                        <Button fx:id="btnImprimir" onAction="#handleImprimirComprobante" text="Imprimir Comprobante" prefHeight="38.0"
-                                style="-fx-background-color: #2f6f4e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
-                            <VBox.margin><Insets top="17.0" /></VBox.margin>
-                        </Button>
                     </children>
+                </HBox>
+                <HBox spacing="25"
+                      alignment="CENTER_LEFT"
+                      style="-fx-padding: 20 0 10 0;">
+
+                    <Button fx:id="btnGuardar"
+                            text="Agendar"
+                            prefWidth="100"
+                            onAction="#handleGuardarCita"
+                            style="-fx-background-color: #D4AF37; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold;"/>
+
+                    <Button fx:id="btnEliminar"
+                            text="Eliminar"
+                            prefWidth="100"
+                            onAction="#handleEliminarCita"
+                            style="-fx-background-color: #C95A43; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold;"/>
+
+                    <Button fx:id="btnImprimir"
+                            text="Imprimir Comprobante"
+                            prefWidth="180"
+                            onAction="#handleImprimirComprobante"
+                            style="-fx-background-color: #2F7D5A; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold;"/>
+
                 </HBox>
             </children>
         </VBox>
 
         <VBox style="-fx-padding: 0 30 25 30;" VBox.vgrow="ALWAYS">
             <children>
-                <TableView fx:id="tablaCitas" VBox.vgrow="ALWAYS"
-                           style="-fx-background-color: white; -fx-border-color: #e0d5b8; -fx-border-radius: 6;">
+                <TableView fx:id="tablaCitas" style="-fx-background-color: white; -fx-border-color: #e0d5b8; -fx-border-radius: 6;" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colCliente" text="Cliente" prefWidth="180.0" />
-                        <TableColumn fx:id="colServicio" text="Servicio" prefWidth="180.0" />
-                        <TableColumn fx:id="colFecha" text="Fecha" prefWidth="120.0" />
-                        <TableColumn fx:id="colHora" text="Hora" prefWidth="90.0" />
-                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="130.0" />
+                        <TableColumn fx:id="colCliente" prefWidth="180.0" text="Cliente" />
+                        <TableColumn fx:id="colServicio" prefWidth="180.0" text="Servicio" />
+                        <TableColumn fx:id="colFecha" prefWidth="120.0" text="Fecha" />
+                        <TableColumn fx:id="colHora" prefWidth="90.0" text="Hora" />
+                        <TableColumn fx:id="colEstado" prefWidth="130.0" text="Estado" />
                     </columns>
                 </TableView>
             </children>

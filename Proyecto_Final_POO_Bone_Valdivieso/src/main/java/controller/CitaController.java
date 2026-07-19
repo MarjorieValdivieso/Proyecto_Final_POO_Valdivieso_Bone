@@ -114,6 +114,23 @@ public class CitaController {
         cita.setEstado(cbEstado.getSelectionModel().getSelectedItem());
 
         boolean guardado = new CitaDao().guardar(cita);
+        if (dpFecha.getValue() == null) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Error");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Debe seleccionar una fecha.");
+            alerta.showAndWait();
+            return;
+        }
+
+        if (dpFecha.getValue().isBefore(java.time.LocalDate.now())) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Error");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No puede seleccionar una fecha anterior al día de hoy.");
+            alerta.showAndWait();
+            return;
+        }
 
         if (guardado) {
             tablaCitas.getItems().add(cita);

@@ -31,31 +31,37 @@ public class DashboardController {
         this.usuarioActual = usuario;
 
         lblUsuario.setText("Usuario: " + usuario.getUsuario());
-        lblRol.setText(usuario.getRol().toUpperCase());
+        actualizarColorRol(usuario.getRol());
 
         String rol = usuario.getRol();
 
         if ("Cajero".equalsIgnoreCase(rol)) {
+
             btnReportes.setVisible(false);
             btnReportes.setManaged(false);
+
             btnIrServicios.setVisible(false);
             btnIrServicios.setManaged(false);
 
+            mostrarClientes();
+
         } else if ("Reportes".equalsIgnoreCase(rol)) {
+
             btnIrClientes.setVisible(false);
             btnIrClientes.setManaged(false);
+
             btnIrServicios.setVisible(false);
             btnIrServicios.setManaged(false);
+
             btnCitas.setVisible(false);
             btnCitas.setManaged(false);
 
+            mostrarReportes();
+
         } else {
-
+            mostrarClientes();
         }
-
-        mostrarClientes();
     }
-
     @FXML
     public void mostrarCitas() {
         cargarContenido("/vista/citas.fxml");
@@ -122,5 +128,41 @@ public class DashboardController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    private void actualizarColorRol(String rol) {
+
+        lblRol.setText(rol);
+
+        String color;
+
+        switch (rol.toUpperCase()) {
+
+            case "ADMINISTRADOR":
+            case "ADMIN":
+                color = "#D4AF37"; // dorado
+                break;
+
+            case "CAJERO":
+                color = "#F39C12"; // naranja
+                break;
+
+            case "REPORTES":
+                color = "#E74C3C"; // rojo
+                break;
+
+            default:
+                color = "#FFFFFF";
+        }
+
+        lblRol.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-border-color: " + color + ";" +
+                        "-fx-border-width: 1.5;" +
+                        "-fx-border-radius: 20;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-padding: 6 16 6 16;" +
+                        "-fx-text-fill: " + color + ";"
+        );
     }
 }

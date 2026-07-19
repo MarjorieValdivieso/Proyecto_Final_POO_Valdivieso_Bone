@@ -85,7 +85,19 @@ public class ServicioController {
             mostrarAlerta("Campo requerido", "El nombre del servicio es obligatorio.", Alert.AlertType.WARNING);
             return;
         }
+        if (duracion.isEmpty()) {
+            mostrarAlerta("Error", "Debe ingresar la duración.", Alert.AlertType.WARNING);
+            return;
+        }
 
+        if (!duracion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+")) {
+            mostrarAlerta("Error", "La duración solo puede contener letras y números.", Alert.AlertType.WARNING);
+            return;
+        }
+        if (Integer.parseInt(txtDuracion.getText()) <= 0) {
+            mostrarAlerta("Error", "La duración debe ser mayor a 0.", Alert.AlertType.WARNING);
+            return;
+        }
         try {
             precio = Double.parseDouble(txtPrecio.getText());
         } catch (NumberFormatException e) {
@@ -138,42 +150,5 @@ public class ServicioController {
         alerta.showAndWait();
     }
 
-    @FXML
-    public void irADashboard() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/dashboard.fxml"));
-            Parent root = loader.load();
 
-            DashboardController controller = loader.getController();
-            controller.setUsuario(usuarioActual);
-
-            Stage stage = (Stage) txtNombre.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Belleza Elegante - Panel de Control");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            mostrarAlerta("Error del Sistema", "No se pudo volver al Dashboard.", Alert.AlertType.ERROR);
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void handleCerrarSesion() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/login.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) txtNombre.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Belleza Elegante - Iniciar Sesión");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            mostrarAlerta("Error del Sistema", "No se pudo cerrar sesión.", Alert.AlertType.ERROR);
-            e.printStackTrace();
-        }
-    }
 }
