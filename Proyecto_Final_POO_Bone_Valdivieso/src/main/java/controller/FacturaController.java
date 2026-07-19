@@ -8,7 +8,6 @@ import javafx.scene.layout.VBox;
 import model.Cita;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class FacturaController {
 
@@ -30,31 +29,36 @@ public class FacturaController {
     private static final double PORCENTAJE_IVA = 0.15;
 
     public void setCita(Cita cita) {
-        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        lblNumero.setText(String.format("%04d", cita.getId()));
-        lblFechaEmision.setText(LocalDate.now().format(formatoFecha));
+        lblNumero.setText("" + cita.getId());
+        lblFechaEmision.setText(LocalDate.now().toString());
         lblCliente.setText(cita.getClienteNombre());
 
         lblServicio.setText(cita.getServicio() != null ? cita.getServicio().getNombre() : "-");
-        lblFechaCita.setText(cita.getFecha() != null ? cita.getFecha().format(formatoFecha) : "-");
-        lblHora.setText(cita.getHora() != null ? cita.getHora().toString() : "-");
+        lblFechaCita.setText("" + cita.getFecha());
+        lblHora.setText("" + cita.getHora());
         lblEstado.setText(cita.getEstado());
 
         double subtotal = cita.calcularCosto();
         double iva = subtotal * PORCENTAJE_IVA;
         double total = subtotal + iva;
 
-        lblSubtotal.setText(String.format("$%.2f", subtotal));
-        lblIva.setText(String.format("$%.2f", iva));
-        lblTotal.setText(String.format("$%.2f", total));
+        lblSubtotal.setText("$" + subtotal);
+        lblIva.setText("$" + iva);
+        lblTotal.setText("$" + total);
     }
 
     @FXML
     public void handleImprimir() {
         PrinterJob job = PrinterJob.createPrinterJob();
 
-        if (job != null && job.showPrintDialog(rootFactura.getScene().getWindow())) {
+        if (job == null) {
+            mostrarAlerta("No se encontró una impresora disponible.");
+            return;
+        }
+
+        boolean aceptado = job.showPrintDialog(rootFactura.getScene().getWindow());
+
+        if (aceptado) {
             boolean impreso = job.printPage(rootFactura);
             if (impreso) {
                 job.endJob();

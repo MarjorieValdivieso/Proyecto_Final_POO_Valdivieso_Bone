@@ -15,13 +15,11 @@ import model.Cita;
 import model.Usuario;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class ReportesController {
 
@@ -35,6 +33,7 @@ public class ReportesController {
 
     private Usuario usuarioActual;
 
+    // Guardamos los datos aqui para poder usarlos tambien al exportar
     private List<Cita> citas;
     private int totalClientes;
     private int pendientes;
@@ -59,7 +58,7 @@ public class ReportesController {
         pendientes = 0;
         confirmadas = 0;
         canceladas = 0;
-        citasPorServicio = new TreeMap<>();
+        citasPorServicio = new HashMap<>();
 
         for (Cita c : citas) {
             String estado = c.getEstado();
@@ -90,8 +89,7 @@ public class ReportesController {
     @FXML
     public void handleExportarReporte() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar reporte como TXT");
-        fileChooser.setInitialFileName("reporte_belleza_elegante.txt");
+        fileChooser.setInitialFileName("reporte.txt");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Archivo de texto (*.txt)", "*.txt"));
 
@@ -102,54 +100,39 @@ public class ReportesController {
             return;
         }
 
-        try (FileWriter writer = new FileWriter(archivo)) {
-            writer.write(generarContenidoReporte());
-            mostrarAlerta("Éxito", "El reporte se exportó correctamente en:\n" + archivo.getAbsolutePath(),
-                    Alert.AlertType.INFORMATION);
+        try {
+            PrintWriter writer = new PrintWriter(archivo);
+
+            writer.println("BELLEZA ELEGANTE - REPORTE");
+            writer.println("----------------------------------");
+            writer.println("Total de clientes: " + totalClientes);
+            writer.println("Total de citas: " + citas.size());
+            writer.println("Pendientes: " + pendientes);
+            writer.println("Confirmadas: " + confirmadas);
+            writer.println("Canceladas: " + canceladas);
+            writer.println();
+
+            writer.println("Citas por servicio:");
+            for (String nombreServicio : citasPorServicio.keySet()) {
+                writer.println("- " + nombreServicio + ": " + citasPorServicio.get(nombreServicio));
+            }
+            writer.println();
+
+            writer.println("Detalle de citas:");
+            for (Cita c : citas) {
+                String servicio = c.getServicio() != null ? c.getServicio().getNombre() : "-";
+                writer.println(c.getClienteNombre() + " | " + servicio + " | "
+                        + c.getFecha() + " | " + c.getHora() + " | " + c.getEstado());
+            }
+
+            writer.close();
+
+            mostrarAlerta("Éxito", "Reporte exportado correctamente.", Alert.AlertType.INFORMATION);
+
         } catch (IOException e) {
             mostrarAlerta("Error", "No se pudo exportar el reporte.", Alert.AlertType.ERROR);
             e.printStackTrace();
         }
-    }
-
-    private String generarContenidoReporte() {
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("========================================\n");
-        sb.append("      BELLEZA ELEGANTE - REPORTE\n");
-        sb.append("========================================\n");
-        sb.append("Generado el: ").append(LocalDateTime.now().format(formato)).append("\n\n");
-
-        sb.append("---------- RESUMEN GENERAL ----------\n");
-        sb.append("Total de clientes:   ").append(totalClientes).append("\n");
-        sb.append("Total de citas:      ").append(citas.size()).append("\n");
-        sb.append("Citas pendientes:    ").append(pendientes).append("\n");
-        sb.append("Citas confirmadas:   ").append(confirmadas).append("\n");
-        sb.append("Citas canceladas:    ").append(canceladas).append("\n\n");
-
-        sb.append("---------- CITAS POR SERVICIO ----------\n");
-        for (Map.Entry<String, Integer> entry : citasPorServicio.entrySet()) {
-            sb.append(String.format("%-30s %d%n", entry.getKey() + ":", entry.getValue()));
-        }
-        sb.append("\n");
-
-        sb.append("---------- DETALLE DE CITAS ----------\n");
-        sb.append(String.format("%-25s %-25s %-12s %-8s %-12s%n",
-                "Cliente", "Servicio", "Fecha", "Hora", "Estado"));
-        sb.append("-------------------------------------------------------------------------------\n");
-
-        for (Cita c : citas) {
-            String servicio = c.getServicio() != null ? c.getServicio().getNombre() : "-";
-            sb.append(String.format("%-25s %-25s %-12s %-8s %-12s%n",
-                    c.getClienteNombre(),
-                    servicio,
-                    c.getFecha() != null ? c.getFecha().toString() : "-",
-                    c.getHora() != null ? c.getHora().toString() : "-",
-                    c.getEstado()));
-        }
-
-        return sb.toString();
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
