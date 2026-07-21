@@ -91,7 +91,6 @@ public class CitaController {
         colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        // Cargar datos
         cbCliente.setItems(FXCollections.observableArrayList(new ClienteDao().listarTodos()));
         cbServicio.setItems(FXCollections.observableArrayList(new ServicioDao().listarTodos()));
         cbEstado.setItems(FXCollections.observableArrayList("Pendiente", "Confirmada", "Cancelada"));

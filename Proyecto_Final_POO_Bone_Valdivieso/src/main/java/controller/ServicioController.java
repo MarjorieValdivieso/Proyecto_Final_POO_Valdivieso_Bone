@@ -77,35 +77,68 @@ public class ServicioController {
 
     @FXML
     public void handleGuardarServicio() {
-        String nombre = txtNombre.getText();
-        String duracion = txtDuracion.getText();
+        String nombre = txtNombre.getText().trim();
+        String duracion = txtDuracion.getText().trim();
         double precio;
 
-        if (nombre == null || nombre.trim().isEmpty()) {
+        if (nombre.isEmpty()) {
             mostrarAlerta("Campo requerido", "El nombre del servicio es obligatorio.", Alert.AlertType.WARNING);
             return;
         }
+
+        if (txtPrecio.getText().trim().isEmpty()) {
+            mostrarAlerta("Campo requerido", "El precio del servicio es obligatorio.", Alert.AlertType.WARNING);
+            return;
+        }
+
         if (duracion.isEmpty()) {
-            mostrarAlerta("Error", "Debe ingresar la duración.", Alert.AlertType.WARNING);
+            mostrarAlerta("Campo requerido", "La duración del servicio es obligatoria.", Alert.AlertType.WARNING);
             return;
         }
 
-        if (!duracion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+")) {
-            mostrarAlerta("Error", "La duración solo puede contener letras y números.", Alert.AlertType.WARNING);
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarAlerta("Error", "El nombre solo puede contener letras.", Alert.AlertType.WARNING);
             return;
         }
-        if (Integer.parseInt(txtDuracion.getText()) <= 0) {
-            mostrarAlerta("Error", "La duración debe ser mayor a 0.", Alert.AlertType.WARNING);
-            return;
+
+        for (Servicio s : listaServicios) {
+            if (s.getNombre().equalsIgnoreCase(nombre)) {
+                mostrarAlerta("Error", "Ya existe un servicio con ese nombre.", Alert.AlertType.WARNING);
+                return;
+            }
         }
+
+        // Validar precio
         try {
-            precio = Double.parseDouble(txtPrecio.getText());
+            precio = Double.parseDouble(txtPrecio.getText().trim());
+
+            if (precio <= 0) {
+                mostrarAlerta("Error", "El precio debe ser mayor a 0.", Alert.AlertType.WARNING);
+                return;
+            }
+
         } catch (NumberFormatException e) {
-            mostrarAlerta("Precio inválido", "Ingresa un número válido para el precio (ej. 5.00).", Alert.AlertType.WARNING);
+            mostrarAlerta("Error", "El precio debe ser un número válido.", Alert.AlertType.WARNING);
             return;
         }
 
-        boolean exito = servicioDao.guardar(new Servicio(0, nombre, precio, duracion));
+        // Validar duración
+        try {
+            int minutos = Integer.parseInt(duracion);
+
+            if (minutos <= 0) {
+                mostrarAlerta("Error", "La duración debe ser mayor a 0.", Alert.AlertType.WARNING);
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error", "La duración debe contener solo números.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        Servicio servicio = new Servicio(0, nombre, precio, duracion);
+
+        boolean exito = servicioDao.guardar(servicio);
 
         if (exito) {
             cargarServicios();

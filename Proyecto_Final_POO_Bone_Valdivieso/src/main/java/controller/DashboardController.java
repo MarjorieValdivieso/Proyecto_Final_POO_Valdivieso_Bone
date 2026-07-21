@@ -144,7 +144,7 @@ public class DashboardController {
                 break;
 
             case "CAJERO":
-                color = "#F39C12"; // naranja
+                color = "#16A34A"; // verde
                 break;
 
             case "REPORTES":
