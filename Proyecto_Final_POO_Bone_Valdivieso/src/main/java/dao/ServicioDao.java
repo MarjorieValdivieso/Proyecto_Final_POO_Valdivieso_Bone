@@ -38,6 +38,31 @@ public class ServicioDao {
         return lista;
     }
 
+    public boolean actualizar(Servicio servicio) {
+        Connection con = Conexion.conectar();
+        if (con == null) return false;
+
+        String sql = "UPDATE servicios SET nombre = ?, precio = ?, duracion = ? WHERE id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, servicio.getNombre());
+            ps.setDouble(2, servicio.getPrecio());
+            ps.setString(3, servicio.getDuracion());
+            ps.setInt(4, servicio.getId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error de SQL al actualizar servicio: " + e.getMessage());
+        } finally {
+            try {
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
     public boolean guardar(Servicio servicio) {
 
         String sql = "INSERT INTO servicios(nombre, precio, duracion) VALUES (?, ?, ?)";
@@ -74,4 +99,5 @@ public class ServicioDao {
             return false;
         }
     }
+
 }

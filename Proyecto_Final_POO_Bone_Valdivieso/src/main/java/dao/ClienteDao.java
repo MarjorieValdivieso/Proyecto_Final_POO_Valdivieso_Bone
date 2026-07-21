@@ -65,52 +65,49 @@ public class ClienteDao {
         return lista;
     }
 
-    public Cliente buscarPorTelefono(String telefono) {
-        String sql = "SELECT * FROM clientes WHERE telefono = ?";
 
+    public boolean existePorNombre(String nombre) {
+        String sql = "SELECT COUNT(*) FROM clientes WHERE nombre = ?";
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, telefono);
+            ps.setString(1, nombre);
+            ResultSet rs = ps.executeQuery();
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Cliente cliente = new Cliente();
-                    cliente.setId(rs.getInt("id"));
-                    cliente.setNombre(rs.getString("nombre"));
-                    cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setCorreo(rs.getString("correo"));
-                    return cliente;
-                }
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
+
         } catch (SQLException e) {
-            System.out.println("Error al buscar cliente por teléfono: " + e.getMessage());
+            e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
-    public int guardarYObtenerId(Cliente cliente) {
-        String sql = "INSERT INTO clientes (nombre, telefono, correo) VALUES (?, ?, ?)";
+    public boolean actualizar(Cliente cliente) {
+        Connection con = Conexion.conectar();
+        if (con == null) return false;
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "UPDATE clientes SET nombre = ?, telefono = ?, correo = ? WHERE id = ?";
 
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, cliente.getNombre());
             ps.setString(2, cliente.getTelefono());
             ps.setString(3, cliente.getCorreo());
+            ps.setInt(4, cliente.getId());
 
-            int filasAfectadas = ps.executeUpdate();
-            if (filasAfectadas > 0) {
-                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1);
-                    }
-                }
-            }
+            return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            System.out.println("Error al guardar cliente y obtener ID: " + e.getMessage());
+            System.out.println("Error de SQL al actualizar cliente: " + e.getMessage());
+        } finally {
+            try {
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-        return -1;
+        return false;
     }
 
 }

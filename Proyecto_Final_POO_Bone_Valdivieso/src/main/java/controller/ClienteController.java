@@ -14,11 +14,15 @@ import model.Cliente;
 import model.Usuario;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ClienteController {
 
     @FXML
     private Button btnGuardar;
+
+    @FXML
+    private Button btnActualizar;
 
     @FXML
     private Button btnEliminar;
@@ -67,6 +71,9 @@ public class ClienteController {
         btnGuardar.setVisible(!esReportes);
         btnGuardar.setManaged(!esReportes);
 
+        btnActualizar.setVisible(!esReportes);
+        btnActualizar.setManaged(!esReportes);
+
         btnEliminar.setVisible(!esReportes);
         btnEliminar.setManaged(!esReportes);
     }
@@ -105,31 +112,14 @@ public class ClienteController {
         String telefono = txtTelefono.getText().trim();
         String correo = txtCorreo.getText().trim();
 
-        if (nombre.isEmpty()) {
-            mostrarAlerta("Campo requerido", "Debe ingresar el nombre.", Alert.AlertType.WARNING);
+        if (!validarCampos(nombre, telefono, correo)) {
             return;
         }
 
-        if (telefono.isEmpty()) {
-            mostrarAlerta("Campo requerido", "Debe ingresar el teléfono.", Alert.AlertType.WARNING);
+        if (clienteDao.existePorNombre(nombre)) {
+            mostrarAlerta("Duplicado", "Ya existe un cliente con ese nombre.", Alert.AlertType.WARNING);
             return;
         }
-
-        if (correo.isEmpty()) {
-            mostrarAlerta("Campo requerido", "Debe ingresar el correo.", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-            mostrarAlerta("Error", "El nombre solo debe contener letras.", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (!telefono.matches("[0-9]+")) {
-            mostrarAlerta("Error", "El teléfono solo debe contener números.", Alert.AlertType.WARNING);
-            return;
-        }
-
 
         boolean exito = clienteDao.guardar(new Cliente(0, nombre, telefono, correo));
 
@@ -138,7 +128,7 @@ public class ClienteController {
             cargarClientes();
             limpiarCampos();
 
-            mostrarAlerta("Éxito",
+            mostrarAlerta("Exito",
                     "Cliente guardado correctamente.",
                     Alert.AlertType.INFORMATION);
 
@@ -146,6 +136,55 @@ public class ClienteController {
 
             mostrarAlerta("Error",
                     "No se pudo guardar el cliente.",
+                    Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    public void handleActualizarCliente() {
+
+        Cliente seleccionado = tablaClientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado == null) {
+            mostrarAlerta("Selecciona un cliente",
+                    "Debes elegir una fila de la tabla para actualizar.",
+                    Alert.AlertType.WARNING);
+            return;
+        }
+
+        String nombre = txtNombre.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String correo = txtCorreo.getText().trim();
+
+        if (!validarCampos(nombre, telefono, correo)) {
+            return;
+        }
+
+        // No duplicados (al actualizar, excluir el propio registro seleccionado)
+        for (Cliente c : listaClientes) {
+            if (c.getId() != seleccionado.getId() && c.getNombre().equalsIgnoreCase(nombre)) {
+                mostrarAlerta("Error", "Ya existe otro cliente con ese nombre.", Alert.AlertType.WARNING);
+                return;
+            }
+        }
+
+        Cliente actualizado = new Cliente(seleccionado.getId(), nombre, telefono, correo);
+
+        boolean exito = clienteDao.actualizar(actualizado);
+
+        if (exito) {
+
+            cargarClientes();
+            limpiarCampos();
+
+            mostrarAlerta("Exito",
+                    "Cliente actualizado correctamente.",
+                    Alert.AlertType.INFORMATION);
+
+        } else {
+
+            mostrarAlerta("Error",
+                    "No se pudo actualizar el cliente.",
                     Alert.AlertType.ERROR);
         }
     }
@@ -164,23 +203,65 @@ public class ClienteController {
             return;
         }
 
-        boolean exito = clienteDao.eliminar(seleccionado.getId());
+        // Confirmación antes de eliminar
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION,
+                "¿Seguro que deseas eliminar a " + seleccionado.getNombre() + "?",
+                ButtonType.YES, ButtonType.NO);
+        confirmacion.setTitle("Confirmar eliminacion");
+        confirmacion.setHeaderText(null);
 
-        if (exito) {
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
 
-            cargarClientes();
-            limpiarCampos();
+        if (resultado.isPresent() && resultado.get() == ButtonType.YES) {
 
-            mostrarAlerta("Éxito",
-                    "Cliente eliminado correctamente.",
-                    Alert.AlertType.INFORMATION);
+            boolean exito = clienteDao.eliminar(seleccionado.getId());
 
-        } else {
+            if (exito) {
 
-            mostrarAlerta("Error",
-                    "No se pudo eliminar el cliente.",
-                    Alert.AlertType.ERROR);
+                cargarClientes();
+                limpiarCampos();
+
+                mostrarAlerta("Exito",
+                        "Cliente eliminado correctamente.",
+                        Alert.AlertType.INFORMATION);
+
+            } else {
+
+                mostrarAlerta("Error",
+                        "No se pudo eliminar el cliente.",
+                        Alert.AlertType.ERROR);
+            }
         }
+    }
+
+    private boolean validarCampos(String nombre, String telefono, String correo) {
+
+        if (nombre.isEmpty()) {
+            mostrarAlerta("Campo requerido", "Debe ingresar el nombre.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (telefono.isEmpty()) {
+            mostrarAlerta("Campo requerido", "Debe ingresar el telefono.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (correo.isEmpty()) {
+            mostrarAlerta("Campo requerido", "Debe ingresar el correo.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarAlerta("Error", "El nombre solo debe contener letras.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (!telefono.matches("[0-9]+")) {
+            mostrarAlerta("Error", "El teléfono solo debe contener numeros.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        return true;
     }
 
     private void limpiarCampos() {

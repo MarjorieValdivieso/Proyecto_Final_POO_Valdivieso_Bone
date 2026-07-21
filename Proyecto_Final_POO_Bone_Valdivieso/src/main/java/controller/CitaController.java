@@ -20,6 +20,8 @@ import model.Usuario;
 
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 public class CitaController {
 
@@ -39,6 +41,8 @@ public class CitaController {
     @FXML private Button btnGuardar;
     @FXML private Button btnEliminar;
     @FXML private Button btnImprimir;
+
+    private final CitaDao citaDao = new CitaDao();
 
     private Usuario usuarioActual;
 
@@ -64,6 +68,7 @@ public class CitaController {
         btnImprimir.setVisible(!esReportes);
         btnImprimir.setManaged(!esReportes);
     }
+
     @FXML
     public void initialize() {
 
@@ -95,13 +100,64 @@ public class CitaController {
         cbServicio.setItems(FXCollections.observableArrayList(new ServicioDao().listarTodos()));
         cbEstado.setItems(FXCollections.observableArrayList("Pendiente", "Confirmada", "Cancelada"));
 
-        tablaCitas.setItems(FXCollections.observableArrayList(new CitaDao().listarTodos()));
+        tablaCitas.setItems(FXCollections.observableArrayList(citaDao.listarTodos()));
     }
 
     @FXML
     public void handleGuardarCita() {
+
         Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
         Servicio servicioSeleccionado = cbServicio.getSelectionModel().getSelectedItem();
+        String estadoSeleccionado = cbEstado.getSelectionModel().getSelectedItem();
+        String horaTexto = txtHora.getText() != null ? txtHora.getText().trim() : "";
+
+        //  Validaciones antes de guardar
+
+        if (clienteSeleccionado == null) {
+            mostrarAlerta("Campo requerido", "Debe seleccionar un cliente.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (servicioSeleccionado == null) {
+            mostrarAlerta("Campo requerido", "Debe seleccionar un servicio.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (dpFecha.getValue() == null) {
+            mostrarAlerta("Campo requerido", "Debe seleccionar una fecha.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (dpFecha.getValue().isBefore(java.time.LocalDate.now())) {
+            mostrarAlerta("Error", "No puede seleccionar una fecha anterior al día de hoy.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (horaTexto.isEmpty()) {
+            mostrarAlerta("Campo requerido", "Debe ingresar la hora.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        LocalTime hora;
+        try {
+            hora = LocalTime.parse(horaTexto);
+        } catch (DateTimeParseException e) {
+            mostrarAlerta("Error", "La hora ingresada no es válida. Use el formato HH:mm (ej. 14:30).", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (estadoSeleccionado == null) {
+            mostrarAlerta("Campo requerido", "Debe seleccionar un estado.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // No duplicados
+        if (citaDao.existeCita(clienteSeleccionado.getId(), dpFecha.getValue(), hora)) {
+            mostrarAlerta("Duplicado", "Ya existe una cita para ese cliente en esa fecha y hora.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // Guarda la cita
 
         Cita cita = new Cita();
         cita.setClienteId(clienteSeleccionado.getId());
@@ -109,32 +165,16 @@ public class CitaController {
         cita.setServicioId(servicioSeleccionado.getId());
         cita.setServicio(servicioSeleccionado);
         cita.setFecha(dpFecha.getValue());
-        cita.setHora(LocalTime.parse(txtHora.getText().trim()));
-        cita.setEstado(cbEstado.getSelectionModel().getSelectedItem());
+        cita.setHora(hora);
+        cita.setEstado(estadoSeleccionado);
 
-        boolean guardado = new CitaDao().guardar(cita);
-        if (dpFecha.getValue() == null) {
-            Alert alerta = new Alert(Alert.AlertType.WARNING);
-            alerta.setTitle("Error");
-            alerta.setHeaderText(null);
-            alerta.setContentText("Debe seleccionar una fecha.");
-            alerta.showAndWait();
-            return;
-        }
-
-        if (dpFecha.getValue().isBefore(java.time.LocalDate.now())) {
-            Alert alerta = new Alert(Alert.AlertType.WARNING);
-            alerta.setTitle("Error");
-            alerta.setHeaderText(null);
-            alerta.setContentText("No puede seleccionar una fecha anterior al día de hoy.");
-            alerta.showAndWait();
-            return;
-        }
+        boolean guardado = citaDao.guardar(cita);
 
         if (guardado) {
             tablaCitas.getItems().add(cita);
+            mostrarAlerta("Exito", "Cita guardada correctamente.", Alert.AlertType.INFORMATION);
         } else {
-            System.out.println("No se pudo guardar la cita.");
+            mostrarAlerta("Error", "No se pudo guardar la cita.", Alert.AlertType.ERROR);
         }
     }
 
@@ -143,24 +183,28 @@ public class CitaController {
         Cita seleccionada = tablaCitas.getSelectionModel().getSelectedItem();
 
         if (seleccionada == null) {
-            Alert alerta = new Alert(Alert.AlertType.WARNING);
-            alerta.setTitle("Selecciona una cita");
-            alerta.setHeaderText(null);
-            alerta.setContentText("Debes elegir una fila de la tabla para eliminar.");
-            alerta.showAndWait();
+            mostrarAlerta("Selecciona una cita", "Debes elegir una fila de la tabla para eliminar.", Alert.AlertType.WARNING);
             return;
         }
 
-        boolean exito = new CitaDao().eliminar(seleccionada.getId());
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION,
+                "¿Seguro que deseas eliminar la cita de " + seleccionada.getClienteNombre() + "?",
+                ButtonType.YES, ButtonType.NO);
+        confirmacion.setTitle("Confirmar eliminacion");
+        confirmacion.setHeaderText(null);
 
-        if (exito) {
-            tablaCitas.getItems().remove(seleccionada);
-        } else {
-            Alert alerta = new Alert(Alert.AlertType.ERROR);
-            alerta.setTitle("Error");
-            alerta.setHeaderText(null);
-            alerta.setContentText("No se pudo eliminar la cita.");
-            alerta.showAndWait();
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
+
+        if (resultado.isPresent() && resultado.get() == ButtonType.YES) {
+
+            boolean exito = citaDao.eliminar(seleccionada.getId());
+
+            if (exito) {
+                tablaCitas.getItems().remove(seleccionada);
+                mostrarAlerta("Exito", "Cita eliminada correctamente.", Alert.AlertType.INFORMATION);
+            } else {
+                mostrarAlerta("Error", "No se pudo eliminar la cita.", Alert.AlertType.ERROR);
+            }
         }
     }
 
@@ -169,11 +213,7 @@ public class CitaController {
         Cita seleccionada = tablaCitas.getSelectionModel().getSelectedItem();
 
         if (seleccionada == null) {
-            Alert alerta = new Alert(Alert.AlertType.WARNING);
-            alerta.setTitle("Selecciona una cita");
-            alerta.setHeaderText(null);
-            alerta.setContentText("Debes elegir una fila de la tabla para generar el comprobante.");
-            alerta.showAndWait();
+            mostrarAlerta("Selecciona una cita", "Debes elegir una fila de la tabla para generar el comprobante.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -191,12 +231,16 @@ public class CitaController {
             stage.show();
 
         } catch (IOException e) {
-            Alert alerta = new Alert(Alert.AlertType.ERROR);
-            alerta.setTitle("Error");
-            alerta.setHeaderText(null);
-            alerta.setContentText("No se pudo generar el comprobante.");
-            alerta.showAndWait();
+            mostrarAlerta("Error", "No se pudo generar el comprobante.", Alert.AlertType.ERROR);
             e.printStackTrace();
         }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

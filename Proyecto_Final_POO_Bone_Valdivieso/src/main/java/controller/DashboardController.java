@@ -140,15 +140,15 @@ public class DashboardController {
 
             case "ADMINISTRADOR":
             case "ADMIN":
-                color = "#D4AF37"; // dorado
+                color = "#D4AF37"; // color dorado
                 break;
 
             case "CAJERO":
-                color = "#16A34A"; // verde
+                color = "#16A34A"; // color verde
                 break;
 
             case "REPORTES":
-                color = "#E74C3C"; // rojo
+                color = "#E74C3C"; // color rojo
                 break;
 
             default:

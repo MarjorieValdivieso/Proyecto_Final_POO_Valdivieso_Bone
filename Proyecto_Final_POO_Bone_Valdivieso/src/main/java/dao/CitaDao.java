@@ -32,27 +32,6 @@ public class CitaDao {
         }
     }
 
-    public boolean actualizar(Cita cita) {
-        String sql = "UPDATE citas SET cliente_id = ?, servicio_id = ?, fecha = ?, hora = ?, estado = ? WHERE id = ?";
-
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, cita.getClienteId());
-            ps.setInt(2, cita.getServicioId());
-            ps.setDate(3, Date.valueOf(cita.getFecha()));
-            ps.setTime(4, Time.valueOf(cita.getHora()));
-            ps.setString(5, cita.getEstado());
-            ps.setInt(6, cita.getId());
-
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar cita: " + e.getMessage());
-            return false;
-        }
-    }
-
     public boolean eliminar(int id) {
         String sql = "DELETE FROM citas WHERE id = ?";
 
@@ -110,6 +89,25 @@ public class CitaDao {
         }
 
         return lista;
+    }
+    public boolean existeCita(int clienteId, LocalDate fecha, LocalTime hora) {
+        String sql = "SELECT COUNT(*) FROM citas WHERE cliente_id = ? AND fecha = ? AND hora = ?";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, clienteId);
+            ps.setDate(2, java.sql.Date.valueOf(fecha));
+            ps.setTime(3, java.sql.Time.valueOf(hora));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

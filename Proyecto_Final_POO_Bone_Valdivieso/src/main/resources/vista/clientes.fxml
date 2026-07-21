@@ -56,12 +56,16 @@
                                            style="-fx-padding: 9; -fx-background-radius: 5; -fx-border-color: #cccccc; -fx-border-radius: 5;" />
                             </children>
                         </VBox>
-                        <Button fx:id="btnGuardar" onAction="#handleGuardarCliente" text="Guardar" prefHeight="38.0"
+                        <Button fx:id="btnGuardar" onAction="#handleGuardarCliente" text="Guardar" prefHeight="30.0"
                                 style="-fx-background-color: linear-gradient(to right, #bfa36f, #d4af37); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
                             <VBox.margin><Insets top="17.0" /></VBox.margin>
                         </Button>
-                        <Button fx:id="btnEliminar" onAction="#handleEliminarCliente" text="Eliminar" prefHeight="38.0"
+                        <Button fx:id="btnEliminar" onAction="#handleEliminarCliente" text="Eliminar" prefHeight="30.0"
                                 style="-fx-background-color: #b8503f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
+                            <VBox.margin><Insets top="17.0" /></VBox.margin>
+                        </Button>
+                        <Button fx:id="btnActualizar" onAction="#handleActualizarCliente" text="Actualizar" prefHeight="30.0"
+                                style="-fx-background-color: #e08e2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
                             <VBox.margin><Insets top="17.0" /></VBox.margin>
                         </Button>
                     </children>

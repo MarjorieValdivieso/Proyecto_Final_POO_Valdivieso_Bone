@@ -60,6 +60,10 @@
                                 style="-fx-background-color: #b8503f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
                             <VBox.margin><Insets top="17.0" /></VBox.margin>
                         </Button>
+                        <Button fx:id="btnActualizar" onAction="#handleActualizarServicio" text="Actualizar" prefHeight="38.0"
+                                style="-fx-background-color: #e08e2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;">
+                            <VBox.margin><Insets top="17.0" /></VBox.margin>
+                        </Button>
                     </children>
                 </HBox>
             </children>
