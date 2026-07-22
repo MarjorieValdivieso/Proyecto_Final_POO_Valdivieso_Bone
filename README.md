@@ -35,24 +35,28 @@ Sistema de gestión para una peluquería en Java (JavaFX) con base de datos Post
 
 | Usuario | Contraseña | Rol |
 |---|---|---|
-| admin | 1234 | Administrador |
-| cajero | 1234 | Cajero |
-| reportes | 1234 | Reportes |
+| admin | admin1234 | Administrador |
+| cajero | cajero1234 | Cajero |
+| reportes | reporte1234 | Reportes |
 
 ---
 
 ## Capturas
 
-`Login
+## Login
 
-<img width="570" height="727" alt="Captura de pantalla 2026-07-05 160947" src="https://github.com/user-attachments/assets/3ec6d06f-93fa-445e-8322-33f5281aba00" />
-
-`Dashboard
-<img width="1560" height="852" alt="image" src="https://github.com/user-attachments/assets/cf3e754a-315b-4875-8cb2-e8a063a3a409" />
+<img width="557" height="721" alt="image" src="https://github.com/user-attachments/assets/f7b4cd91-6d42-411e-8cfd-ffdeb414f9f7" />
 
 
+## Rol Administrador
+<img width="1500" height="910" alt="image" src="https://github.com/user-attachments/assets/6e0f2773-f526-4708-b644-0a50be908892" />
 
----
 
-##  Pendiente
-- [ ] Ejecutable `.exe`
+## Rol Cajero
+<img width="1496" height="910" alt="image" src="https://github.com/user-attachments/assets/1f277960-1cdd-4cd9-919b-b0d8c5b2cec2" />
+
+## Rol Reportes
+<img width="1486" height="897" alt="image" src="https://github.com/user-attachments/assets/cc4f778b-c2c1-4f95-9f8a-713360cb0338" />
+
+
+
